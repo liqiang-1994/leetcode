@@ -21,7 +21,8 @@ public class Solution extends VersionControl {
          int start = 1;
          int end = n;
          while(start < end) {
-             int mid = start + (end - start)/2;
+             int mid = start + (end - start)/2; 
+             //use it  not mid = (end -start) /2是避免溢出，或者int mid = (end +start) >>>1; 使用无符号移
              if(!isBadVersion(mid)) {
                 start = mid+1;
              }else {
@@ -29,6 +30,53 @@ public class Solution extends VersionControl {
               }
             }
             return start;
-         }
+       }
  }
 ``` 
+
+``` java
+public class Solution {
+   public int firstBadVersion(int n) {
+       return binarySearch(1, n);
+     }
+     public int binarySearch(int start, int end) {
+         long startLong  = start;
+         long endLong  = end;
+         Long middleLong = (startLong + endLong ) / 2;
+         int middle = middleLong.intValue();
+         if(isBadVersion(middle)) {
+              if(!isBadVersion(middle-1)) {
+                return middle;
+                }
+                return binarySearch(start, middle);
+         }else {
+              if(isBadVersion(middle +1)) {
+                return middle +1;
+              }
+                return binarySearch(middle+1, end);
+             }
+        }
+ }
+```
+* 第一种算法的python版
+``` python
+# The isBadVersion API is already defined for you.
+# @param version, an integer
+# @return a bool
+# def isBadVersion(version):
+class Solution(object):
+    def firstBadVersion(self, n):
+        """
+        :type n:int
+        :rtype: int
+        """
+        start =1
+        end =n
+        while start < end:
+            mid = (start + end) >>1
+            if not isBadVersion(mid):
+                start = mid + 1
+            else:
+                end = mid
+        return start    
+```
