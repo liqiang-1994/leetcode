@@ -24,7 +24,7 @@ public class Solution {
             bulls++;
          }else {
             if(numbers[secret.charAt(i) - '0']-- >0) cows++;
-            if(numbers[guess.charAt(i) - '0']++ <0) cow++;
+            if(numbers[guess.charAt(i) - '0']++ <0) cows++;
          }
       }
       return bulls +"A" +cows + "B";
@@ -32,7 +32,39 @@ public class Solution {
 }
         
 ```
+* 上面的方法是使用chaAt()依次遍历，可以将secret和guess转化成char类型数组，这样效率更高
+``` python
+class Solution(object):
+    def getHint(self, secret, guess):
+        """
+        :type secret: str
+        :type guess: str
+        :rtype: str
+        """
+        bulls, cows = 0, 0
+        s, g = {}, {} #it's hashtable
+        for i in xrange(len(secret)):
+            if secret[i] == guess[i]:
+                bulls+=1
+            else:
+                s[secret[i]] = s.get(secret[i], 0) +1 #每次加1，使用get()避免字典里无此值抛出错误
+                g[guess[i]] = g.get(guess[i], 0) + 1
+        for k in s:
+            if k in g:
+                cows+= min(s[k], g[k]) #去重
+        return  "{}A{}B".format(bulls,cows)
+                
+```
 
-``` java
-
+``` python
+class Solution(object):
+    def getHint(self, secret, guess):
+        """
+        :type secret: str
+        :type guess: str
+        :rtype: str
+        """
+        s, g = Counter(secret), Counter(guess) # 生成值-个数的字典
+        a = sum(i==j for i, j in zip(secret, guess))
+        return "%sA%sB" % (a, sum((s & g).values()) -a)
 ```
