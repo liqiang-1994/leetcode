@@ -40,7 +40,7 @@ class Solution(object):
         n, nex, res = 0, [1], []
         while n <numRows:
             res.append(nex)
-            nex = [1] +[[nex[i] +nex[i+1] for i in xrange(len(res)-1)] +[1]
+            nex = [1] +[nex[i] +nex[i+1] for i in xrange(len(res)-1)] +[1]
             n+=1
         return res
 ```
